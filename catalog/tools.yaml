@@ -1,0 +1,915 @@
+# Curated catalog of open-source AI tools.
+#
+# Hand-maintained fields live here; GitHub metrics live in data/metrics.json
+# (refreshed by `python -m ai_tools refresh`). Every repo listed here must have
+# an entry in data/metrics.json - the test suite enforces this.
+#
+# Field reference
+#   repo              owner/name on GitHub (canonical name after redirects)
+#   category          one of the keys in `categories` below
+#   summary           one line, what it is
+#   use_cases         where it earns its place in a production AI app
+#   mode              library | service | mcp | dev-tool | poc | reject   (see docs/EVALUATION.md)
+#   relevance         0-10 ESTIMATE - value for building production AI apps
+#   quality           0-10 ESTIMATE - technical depth, design, docs
+#   integration       0-10 ESTIMATE - ease of adoption; 10 = pip/npm install, 0 = heavy infra
+#   license_class     permissive | open-core | source-available | copyleft | model-license
+#   license_note      optional, from reading the repo's LICENSE file
+#   flags             optional list of risk flags (shown in README)
+#   reason            required when mode == reject
+#   security_penalty  optional 0-10, subtracted from the license score for known security concerns
+
+categories:
+  orchestration: LLM frameworks & orchestration
+  agents: Agents & multi-agent systems
+  memory: Agent memory & knowledge graphs
+  mcp: Model Context Protocol (servers, SDKs)
+  rag: RAG, hybrid search & reranking
+  vector-db: Vector databases & retrieval stores
+  inference: Local & self-hosted inference
+  coding-agents: Coding agents & AI dev tools
+  evaluation: Evaluation, observability & tracing
+  document-processing: Document processing & extraction
+  security: Security, guardrails & red teaming
+  workflow: Workflow automation, browsing & crawling
+  ui: UI & AI application frameworks
+
+tools:
+  # ---------------------------------------------------------------- orchestration
+  - repo: langchain-ai/langchain
+    category: orchestration
+    summary: Broad LLM framework - model/tool abstractions, hundreds of integrations, agent building blocks.
+    use_cases: Fast prototyping across many providers and data sources.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 7
+    license_class: permissive
+    flags: [Large API surface - pin versions and isolate behind your own interfaces]
+
+  - repo: run-llama/llama_index
+    category: orchestration
+    summary: Data framework for ingesting, indexing and querying documents with LLMs.
+    use_cases: Document-centric RAG, ingestion pipelines, query engines.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 7
+    license_class: permissive
+
+  - repo: microsoft/semantic-kernel
+    category: orchestration
+    summary: Microsoft SDK for LLM orchestration with first-class C#/.NET, Python and Java.
+    use_cases: Enterprise .NET apps, plugin/function calling, Azure-hosted workloads.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: deepset-ai/haystack
+    category: orchestration
+    summary: Pipeline-based orchestration for RAG, search and agents with explicit components.
+    use_cases: Production RAG pipelines where routing and retrieval steps must be explicit.
+    mode: library
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: permissive
+
+  - repo: stanfordnlp/dspy
+    category: orchestration
+    summary: Programming (not prompting) LMs - declarative modules with automatic prompt/weight optimization.
+    use_cases: Optimizing prompts against a metric once an eval set exists.
+    mode: poc
+    relevance: 7
+    quality: 8
+    integration: 6
+    license_class: permissive
+
+  - repo: pydantic/pydantic-ai
+    category: orchestration
+    summary: Type-safe agent framework from the Pydantic team with structured outputs end to end.
+    use_cases: Python/FastAPI services that need validated, typed LLM outputs.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: BerriAI/litellm
+    category: orchestration
+    summary: OpenAI-format SDK and gateway for 100+ LLM APIs with cost tracking, fallbacks and rate limits.
+    use_cases: One client for many providers; central gateway with budgets and logging.
+    mode: service
+    relevance: 8
+    quality: 7
+    integration: 8
+    license_class: open-core
+    license_note: MIT outside enterprise/; enterprise/ is under a separate commercial license.
+    flags: [Very high open issue+PR count (5.5k) - review release notes before upgrades]
+
+  # ---------------------------------------------------------------- agents
+  - repo: langchain-ai/langgraph
+    category: agents
+    summary: Stateful, graph-based agent runtime with checkpointing, streaming and human-in-the-loop.
+    use_cases: Long-running or multi-step agents that need durable state and control flow.
+    mode: library
+    relevance: 9
+    quality: 9
+    integration: 7
+    license_class: permissive
+
+  - repo: microsoft/agent-framework
+    category: agents
+    summary: Microsoft's agent and multi-agent workflow framework for Python and .NET (successor to AutoGen).
+    use_cases: Multi-agent orchestration on Microsoft/Azure stacks; MCP and A2A interop.
+    mode: library
+    relevance: 9
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: openai/openai-agents-python
+    category: agents
+    summary: Lightweight multi-agent SDK with handoffs, guardrails and built-in tracing.
+    use_cases: Small, readable agent systems with minimal framework overhead.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: crewAIInc/crewAI
+    category: agents
+    summary: Role-based multi-agent orchestration (crews of agents with tasks and processes).
+    use_cases: Task decomposition workflows that map naturally to roles.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 8
+    license_class: permissive
+
+  - repo: google/adk-python
+    category: agents
+    summary: Google's code-first Agent Development Kit with built-in evaluation and deployment.
+    use_cases: Agents targeting Gemini / Vertex AI, or teams wanting eval in the same toolkit.
+    mode: library
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: permissive
+
+  - repo: agno-agi/agno
+    category: agents
+    summary: Agent framework plus runtime and control plane for running agent platforms.
+    use_cases: Teams that want framework and hosting runtime from one project.
+    mode: poc
+    relevance: 6
+    quality: 7
+    integration: 7
+    license_class: permissive
+
+  - repo: microsoft/autogen
+    category: agents
+    summary: Microsoft Research multi-agent framework.
+    use_cases: Historical reference only.
+    mode: reject
+    relevance: 3
+    quality: 7
+    integration: 6
+    license_class: permissive
+    license_note: Code under MIT (LICENSE-CODE); docs under CC-BY-4.0, which is what GitHub reports.
+    reason: README states the project is archived and no longer maintained (no security fixes). Use microsoft/agent-framework instead.
+    security_penalty: 3
+    flags: [Declared unmaintained in README]
+
+  - repo: FoundationAgents/MetaGPT
+    category: agents
+    summary: Multi-agent framework that simulates a software company.
+    use_cases: Research and experimentation.
+    mode: reject
+    relevance: 4
+    quality: 6
+    integration: 5
+    license_class: permissive
+    reason: No commits since 2026-01-21 and research-oriented; general-purpose frameworks above cover the need.
+    flags: [No push in ~9 months]
+
+  # ---------------------------------------------------------------- memory
+  - repo: mem0ai/mem0
+    category: memory
+    summary: Drop-in long-term memory layer for agents and assistants.
+    use_cases: Personalization and cross-session recall in assistants.
+    mode: poc
+    relevance: 7
+    quality: 7
+    integration: 8
+    license_class: permissive
+
+  - repo: getzep/graphiti
+    category: memory
+    summary: Real-time, temporally-aware knowledge graphs for agent memory.
+    use_cases: Agents that must reason over facts that change over time.
+    mode: poc
+    relevance: 7
+    quality: 8
+    integration: 6
+    license_class: permissive
+
+  - repo: topoteretes/cognee
+    category: memory
+    summary: Memory platform combining graph and vector stores for agents.
+    use_cases: Knowledge-graph-backed memory with small local models.
+    mode: poc
+    relevance: 6
+    quality: 7
+    integration: 6
+    license_class: permissive
+
+  - repo: letta-ai/letta
+    category: memory
+    summary: Platform for stateful agents with self-editing memory (formerly MemGPT).
+    use_cases: Long-lived agents with persistent, structured memory.
+    mode: poc
+    relevance: 6
+    quality: 7
+    integration: 5
+    license_class: permissive
+    flags: [GitHub reports 0 open issues/PRs and no primary language - confirm where development now happens]
+
+  # ---------------------------------------------------------------- mcp
+  - repo: modelcontextprotocol/python-sdk
+    category: mcp
+    summary: Official Python SDK for building MCP servers and clients.
+    use_cases: Exposing internal tools/data to any MCP-capable agent or IDE.
+    mode: library
+    relevance: 9
+    quality: 9
+    integration: 9
+    license_class: permissive
+
+  - repo: PrefectHQ/fastmcp
+    category: mcp
+    summary: High-level, Pythonic framework for MCP servers and clients (auth, composition, testing).
+    use_cases: Production MCP servers with less boilerplate than the raw SDK.
+    mode: library
+    relevance: 9
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: modelcontextprotocol/typescript-sdk
+    category: mcp
+    summary: Official TypeScript SDK for MCP servers and clients.
+    use_cases: MCP servers in Node/TypeScript services.
+    mode: library
+    relevance: 8
+    quality: 9
+    integration: 9
+    license_class: permissive
+    license_note: GitHub reports NOASSERTION; the MCP project is moving from MIT to Apache-2.0 (verified on modelcontextprotocol/servers, not individually on this repo).
+
+  - repo: modelcontextprotocol/servers
+    category: mcp
+    summary: Reference MCP servers (filesystem, git, fetch, memory, time, ...).
+    use_cases: Starting points and examples; local developer tooling.
+    mode: mcp
+    relevance: 8
+    quality: 7
+    integration: 9
+    license_class: permissive
+    license_note: Transitioning MIT -> Apache-2.0; docs CC-BY-4.0.
+    flags: [Reference implementations - not hardened for production exposure]
+
+  - repo: github/github-mcp-server
+    category: mcp
+    summary: GitHub's official MCP server for repos, issues, PRs and Actions.
+    use_cases: Letting agents read and act on GitHub with scoped tokens.
+    mode: mcp
+    relevance: 9
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: microsoft/playwright-mcp
+    category: mcp
+    summary: Browser automation for agents via Playwright's accessibility tree.
+    use_cases: Web testing, form-driven workflows, UI verification by agents.
+    mode: mcp
+    relevance: 8
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: ChromeDevTools/chrome-devtools-mcp
+    category: mcp
+    summary: Chrome DevTools (performance, network, console) exposed to coding agents.
+    use_cases: Debugging front-ends and performance traces from an agent.
+    mode: mcp
+    relevance: 7
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: upstash/context7
+    category: mcp
+    summary: Serves current, version-specific library documentation to agents.
+    use_cases: Reducing hallucinated APIs in coding agents.
+    mode: mcp
+    relevance: 8
+    quality: 7
+    integration: 9
+    license_class: permissive
+    flags: [Backed by a hosted service - queries leave your network]
+    security_penalty: 1
+
+  # ---------------------------------------------------------------- rag
+  - repo: FlagOpen/FlagEmbedding
+    category: rag
+    summary: BGE embedding and reranker models plus training/inference code.
+    use_cases: Self-hosted embeddings and cross-encoder reranking for hybrid search.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 7
+    license_class: permissive
+    flags: [Model weights carry their own licenses - check each model card]
+
+  - repo: infiniflow/ragflow
+    category: rag
+    summary: End-to-end RAG engine with deep document understanding and agent features.
+    use_cases: Turnkey RAG over complex documents when you don't want to assemble a pipeline.
+    mode: poc
+    relevance: 7
+    quality: 8
+    integration: 4
+    license_class: permissive
+    flags: [Heavy multi-container deployment]
+
+  - repo: microsoft/graphrag
+    category: rag
+    summary: Graph-based RAG that builds entity/community summaries for global questions.
+    use_cases: Corpus-wide questions ("what are the themes across these documents?") that plain vector RAG misses.
+    mode: poc
+    relevance: 7
+    quality: 8
+    integration: 5
+    license_class: permissive
+    flags: [Indexing is LLM-call heavy - estimate cost before large corpora]
+
+  - repo: HKUDS/LightRAG
+    category: rag
+    summary: Lightweight graph-augmented RAG with incremental updates.
+    use_cases: Graph-RAG benefits at lower indexing cost than full GraphRAG.
+    mode: poc
+    relevance: 7
+    quality: 7
+    integration: 7
+    license_class: permissive
+
+  - repo: VectifyAI/PageIndex
+    category: rag
+    summary: Vectorless, reasoning-based document index (tree of contents navigated by the LLM).
+    use_cases: Long structured documents (filings, manuals) where chunking loses context.
+    mode: poc
+    relevance: 6
+    quality: 6
+    integration: 7
+    license_class: permissive
+
+  # ---------------------------------------------------------------- vector-db
+  - repo: pgvector/pgvector
+    category: vector-db
+    summary: Vector similarity search inside Postgres.
+    use_cases: Default choice when you already run Postgres; transactional + vector in one store.
+    mode: service
+    relevance: 9
+    quality: 8
+    integration: 8
+    license_class: permissive
+    license_note: PostgreSQL License (permissive); GitHub reports NOASSERTION.
+
+  - repo: qdrant/qdrant
+    category: vector-db
+    summary: High-performance Rust vector database with filtering and hybrid search.
+    use_cases: Dedicated vector store at scale with rich payload filters.
+    mode: service
+    relevance: 8
+    quality: 9
+    integration: 7
+    license_class: permissive
+
+  - repo: chroma-core/chroma
+    category: vector-db
+    summary: Developer-friendly embedded/server vector store.
+    use_cases: Prototypes, tests and small apps.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 9
+    license_class: permissive
+
+  - repo: lancedb/lancedb
+    category: vector-db
+    summary: Embedded, serverless retrieval library on the Lance columnar format; multimodal.
+    use_cases: Embedded vector search without running a server; multimodal data.
+    mode: library
+    relevance: 7
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: weaviate/weaviate
+    category: vector-db
+    summary: Vector database storing objects and vectors with hybrid search and modules.
+    use_cases: Hybrid (BM25 + vector) search with built-in vectorizer modules.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 6
+    license_class: open-core
+    license_note: BSD-3-Clause outside wl/; wl/ is enterprise-only.
+
+  - repo: milvus-io/milvus
+    category: vector-db
+    summary: Cloud-native, distributed vector database for very large collections.
+    use_cases: Billion-scale vector search.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 4
+    license_class: permissive
+    flags: [Distributed deployment has many moving parts]
+
+  # ---------------------------------------------------------------- inference
+  - repo: ollama/ollama
+    category: inference
+    summary: Run open-weight models locally with one command and an OpenAI-compatible API.
+    use_cases: Local development, offline demos, privacy-sensitive experimentation.
+    mode: dev-tool
+    relevance: 9
+    quality: 8
+    integration: 9
+    license_class: permissive
+    flags: [Local API has no built-in auth - keep it bound to localhost]
+
+  - repo: ggml-org/llama.cpp
+    category: inference
+    summary: LLM inference in C/C++ (GGUF) on CPUs, GPUs and Apple silicon.
+    use_cases: Edge/on-device inference; the engine underneath many local tools.
+    mode: dev-tool
+    relevance: 8
+    quality: 9
+    integration: 6
+    license_class: permissive
+
+  - repo: vllm-project/vllm
+    category: inference
+    summary: High-throughput, memory-efficient LLM serving engine (PagedAttention).
+    use_cases: Self-hosted production serving on GPUs.
+    mode: service
+    relevance: 8
+    quality: 9
+    integration: 5
+    license_class: permissive
+
+  - repo: sgl-project/sglang
+    category: inference
+    summary: High-performance serving framework for LLMs and multimodal models.
+    use_cases: GPU serving with structured generation and prefix caching.
+    mode: service
+    relevance: 7
+    quality: 9
+    integration: 5
+    license_class: permissive
+
+  - repo: huggingface/transformers
+    category: inference
+    summary: Model-definition framework for text, vision, audio and multimodal models.
+    use_cases: Running/fine-tuning open models, embeddings and classifiers in Python.
+    mode: library
+    relevance: 8
+    quality: 9
+    integration: 6
+    license_class: permissive
+
+  - repo: mudler/LocalAI
+    category: inference
+    summary: OpenAI-compatible local engine for LLMs, images, audio and embeddings.
+    use_cases: Single local endpoint covering many modalities.
+    mode: dev-tool
+    relevance: 6
+    quality: 7
+    integration: 7
+    license_class: permissive
+
+  - repo: unslothai/unsloth
+    category: inference
+    summary: Fast, memory-efficient fine-tuning and local training UI.
+    use_cases: LoRA/QLoRA fine-tunes on a single GPU.
+    mode: poc
+    relevance: 6
+    quality: 8
+    integration: 6
+    license_class: permissive
+
+  # ---------------------------------------------------------------- coding-agents
+  - repo: openai/codex
+    category: coding-agents
+    summary: OpenAI's terminal coding agent (Rust).
+    use_cases: Agentic coding in the terminal and CI.
+    mode: dev-tool
+    relevance: 8
+    quality: 8
+    integration: 9
+    license_class: permissive
+    flags: [24k open issues+PRs - triage backlog is very large]
+
+  - repo: google-gemini/gemini-cli
+    category: coding-agents
+    summary: Google's open-source terminal agent for Gemini models.
+    use_cases: Terminal coding agent with MCP support.
+    mode: dev-tool
+    relevance: 7
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: cline/cline
+    category: coding-agents
+    summary: Autonomous coding agent as IDE extension, CLI or SDK.
+    use_cases: In-editor agent with per-step approvals; bring your own model.
+    mode: dev-tool
+    relevance: 7
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: aaif-goose/goose
+    category: coding-agents
+    summary: Extensible local agent that installs, executes, edits and tests with any LLM.
+    use_cases: MCP-extensible local automation beyond code suggestions.
+    mode: dev-tool
+    relevance: 7
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: OpenHands/OpenHands
+    category: coding-agents
+    summary: Open platform for autonomous software-development agents in sandboxes.
+    use_cases: Self-hosted autonomous coding agents running in containers.
+    mode: dev-tool
+    relevance: 7
+    quality: 8
+    integration: 6
+    license_class: permissive
+
+  - repo: Aider-AI/aider
+    category: coding-agents
+    summary: AI pair programming in the terminal with git-aware edits.
+    use_cases: Lightweight terminal pairing with any model.
+    mode: dev-tool
+    relevance: 6
+    quality: 8
+    integration: 9
+    license_class: permissive
+    flags: [Last push 2026-05-22 - maintenance has slowed]
+
+  # ---------------------------------------------------------------- evaluation
+  - repo: langfuse/langfuse
+    category: evaluation
+    summary: Open-source LLM tracing, evals, prompt management and analytics.
+    use_cases: Production observability for LLM apps; self-hostable.
+    mode: service
+    relevance: 9
+    quality: 8
+    integration: 7
+    license_class: open-core
+    license_note: MIT outside ee/ directories; ee/ under a separate license.
+
+  - repo: promptfoo/promptfoo
+    category: evaluation
+    summary: Declarative prompt/agent/RAG testing and red teaming with CI integration.
+    use_cases: Regression tests for prompts in CI; security red-team scans.
+    mode: dev-tool
+    relevance: 9
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: confident-ai/deepeval
+    category: evaluation
+    summary: Pytest-style LLM evaluation framework with many built-in metrics.
+    use_cases: Unit-test-like evals for RAG and agents in Python.
+    mode: dev-tool
+    relevance: 8
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: Arize-ai/phoenix
+    category: evaluation
+    summary: AI observability and evaluation built on OpenTelemetry/OpenInference.
+    use_cases: OTel-native tracing and evals, local or self-hosted.
+    mode: service
+    relevance: 8
+    quality: 8
+    integration: 7
+    license_class: source-available
+    license_note: Elastic License 2.0 - may not be offered to third parties as a hosted/managed service.
+
+  - repo: comet-ml/opik
+    category: evaluation
+    summary: Tracing, automated evaluations and dashboards for LLM apps and agents.
+    use_cases: Self-hosted alternative to commercial LLM observability suites.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: permissive
+
+  - repo: mlflow/mlflow
+    category: evaluation
+    summary: AI engineering platform for experiment tracking, tracing, evaluation and model registry.
+    use_cases: Teams already on MLflow/Databricks adding LLM tracing and evals.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 6
+    license_class: permissive
+
+  - repo: vibrantlabsai/ragas
+    category: evaluation
+    summary: Metrics for evaluating RAG and LLM applications (faithfulness, context precision, ...).
+    use_cases: RAG-specific quality metrics.
+    mode: dev-tool
+    relevance: 6
+    quality: 7
+    integration: 8
+    license_class: permissive
+    flags: [Repo moved from explodinggradients/ragas, last push 2026-02-24 - check activity before depending on it]
+
+  # ---------------------------------------------------------------- document-processing
+  - repo: docling-project/docling
+    category: document-processing
+    summary: Converts PDF, DOCX, PPTX, XLSX, HTML and images to structured Markdown/JSON with layout and tables.
+    use_cases: High-fidelity ingestion for RAG, including tables and reading order.
+    mode: library
+    relevance: 9
+    quality: 9
+    integration: 8
+    license_class: permissive
+
+  - repo: microsoft/markitdown
+    category: document-processing
+    summary: Lightweight converter from Office files, PDFs and more to Markdown.
+    use_cases: Quick, dependency-light ingestion where layout fidelity is less critical.
+    mode: library
+    relevance: 9
+    quality: 7
+    integration: 10
+    license_class: permissive
+
+  - repo: google/langextract
+    category: document-processing
+    summary: LLM-based structured extraction from text with precise source grounding.
+    use_cases: Pulling entities/fields out of documents with citations back to spans.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: datalab-to/marker
+    category: document-processing
+    summary: Fast, accurate PDF to Markdown/JSON conversion.
+    use_cases: Scientific and complex PDFs.
+    mode: library
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: permissive
+    flags: [Code is Apache-2.0; check the model weights license separately before commercial use]
+
+  - repo: Unstructured-IO/unstructured
+    category: document-processing
+    summary: ETL for partitioning and chunking many document types for LLMs.
+    use_cases: Broad file-type coverage in ingestion pipelines.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 6
+    license_class: permissive
+    flags: [Large optional dependency tree - install only the extras you need]
+
+  - repo: PaddlePaddle/PaddleOCR
+    category: document-processing
+    summary: OCR and document parsing toolkit supporting 100+ languages.
+    use_cases: Scanned documents and multilingual OCR.
+    mode: library
+    relevance: 7
+    quality: 8
+    integration: 5
+    license_class: permissive
+    flags: [Requires the PaddlePaddle framework]
+
+  # ---------------------------------------------------------------- security
+  - repo: NVIDIA-NeMo/Guardrails
+    category: security
+    summary: Programmable guardrails (input/output/dialog rails) for LLM apps.
+    use_cases: Topical control, jailbreak and PII checks around a model.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 6
+    license_class: permissive
+    license_note: Apache-2.0 per LICENSE.md (GitHub reports NOASSERTION). Repo moved from NVIDIA/NeMo-Guardrails.
+
+  - repo: NVIDIA/garak
+    category: security
+    summary: LLM vulnerability scanner - probes for jailbreaks, injection, leakage and more.
+    use_cases: Pre-release security scans of models and endpoints.
+    mode: dev-tool
+    relevance: 8
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: guardrails-ai/guardrails
+    category: security
+    summary: Validators for LLM outputs (structure, PII, toxicity, ...) with a hub of checks.
+    use_cases: Output validation and re-asking on failure.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 7
+    license_class: permissive
+
+  - repo: meta-llama/PurpleLlama
+    category: security
+    summary: Meta's LLM security tools (Llama Guard, Prompt Guard, CyberSecEval).
+    use_cases: Safety classifiers and security benchmarks.
+    mode: poc
+    relevance: 6
+    quality: 7
+    integration: 5
+    license_class: model-license
+    license_note: Llama 3.2 Community License (attribution, acceptable-use policy, 700M MAU clause).
+
+  - repo: protectai/llm-guard
+    category: security
+    summary: Security toolkit for LLM interactions (scanners for prompts/outputs).
+    use_cases: n/a
+    mode: reject
+    relevance: 6
+    quality: 7
+    integration: 7
+    license_class: permissive
+    reason: Archived on GitHub - no further fixes. Use NeMo Guardrails or guardrails-ai.
+    flags: [Archived]
+
+  # ---------------------------------------------------------------- workflow
+  - repo: unclecode/crawl4ai
+    category: workflow
+    summary: Open-source crawler/scraper that turns websites into LLM-ready Markdown.
+    use_cases: Self-hosted web ingestion for RAG and agents.
+    mode: library
+    relevance: 8
+    quality: 8
+    integration: 8
+    license_class: permissive
+
+  - repo: browser-use/browser-use
+    category: workflow
+    summary: Python library for AI browser agents.
+    use_cases: Agents that must navigate and act on real websites.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 8
+    license_class: permissive
+
+  - repo: firecrawl/firecrawl
+    category: workflow
+    summary: Web scraping/crawling API that returns LLM-ready data.
+    use_cases: Managed or self-hosted web data extraction.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: copyleft
+    license_note: AGPL-3.0 - network use of a modified self-hosted copy triggers source-sharing obligations.
+
+  - repo: n8n-io/n8n
+    category: workflow
+    summary: Workflow automation with AI nodes, 400+ integrations and MCP support.
+    use_cases: Internal automations that glue LLM steps to SaaS tools.
+    mode: service
+    relevance: 6
+    quality: 8
+    integration: 7
+    license_class: source-available
+    license_note: Sustainable Use License - internal business or non-commercial use only; .ee files need an enterprise license.
+
+  - repo: langgenius/dify
+    category: workflow
+    summary: Visual platform for agentic workflows and RAG pipelines.
+    use_cases: Low-code LLM apps built by mixed technical/non-technical teams.
+    mode: service
+    relevance: 6
+    quality: 8
+    integration: 6
+    license_class: source-available
+    license_note: Modified Apache-2.0 - no multi-tenant SaaS without a commercial license; frontend logo/copyright must stay.
+
+  - repo: langflow-ai/langflow
+    category: workflow
+    summary: Visual builder for agents and workflows.
+    use_cases: Prototyping flows visually before coding them.
+    mode: poc
+    relevance: 6
+    quality: 7
+    integration: 7
+    license_class: permissive
+    flags: ["Had a critical unauthenticated RCE in 2025 (CVE-2025-3248) - keep patched and never expose without auth"]
+    security_penalty: 2
+
+  - repo: FlowiseAI/Flowise
+    category: workflow
+    summary: Visual agent builder.
+    use_cases: n/a
+    mode: reject
+    relevance: 5
+    quality: 7
+    integration: 7
+    license_class: open-core
+    license_note: Apache-2.0 except packages/server/src/enterprise and marked files, which are under a commercial license.
+    reason: Archived on GitHub (last push 2026-08-13). Use Langflow or Dify for visual building.
+    flags: [Archived]
+
+  # ---------------------------------------------------------------- ui
+  - repo: vercel/ai
+    category: ui
+    summary: TypeScript AI SDK - streaming, tool calls and generative UI for React/Next/Svelte/Vue.
+    use_cases: Front ends for AI apps; provider-agnostic TS backends.
+    mode: library
+    relevance: 8
+    quality: 9
+    integration: 8
+    license_class: permissive
+    license_note: Apache-2.0 per LICENSE (GitHub reports NOASSERTION).
+
+  - repo: open-webui/open-webui
+    category: ui
+    summary: Self-hosted chat UI for Ollama and OpenAI-compatible APIs with RAG and tools.
+    use_cases: Internal ChatGPT-style portal over your own models.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 8
+    license_class: source-available
+    license_note: BSD-3 plus a branding clause - "Open WebUI" branding may not be removed above 50 users/30 days without permission or an enterprise license.
+
+  - repo: LibreChat-AI/LibreChat
+    category: ui
+    summary: Multi-provider chat UI with agents, MCP, multi-user auth and code interpreter.
+    use_cases: Internal chat portal that must support many providers and SSO.
+    mode: service
+    relevance: 7
+    quality: 8
+    integration: 7
+    license_class: permissive
+
+  - repo: CopilotKit/CopilotKit
+    category: ui
+    summary: Front-end stack for in-app agents and generative UI (makers of AG-UI).
+    use_cases: Embedding copilots into existing React/Angular apps.
+    mode: library
+    relevance: 7
+    quality: 7
+    integration: 7
+    license_class: permissive
+
+  - repo: gradio-app/gradio
+    category: ui
+    summary: Build and share ML/LLM demo apps in pure Python.
+    use_cases: Internal demos and evaluation UIs.
+    mode: dev-tool
+    relevance: 7
+    quality: 8
+    integration: 9
+    license_class: permissive
+
+  - repo: Chainlit/chainlit
+    category: ui
+    summary: Python framework for conversational AI front ends.
+    use_cases: n/a
+    mode: reject
+    relevance: 6
+    quality: 7
+    integration: 9
+    license_class: permissive
+    reason: Archived on GitHub. Use Gradio for Python demos or Vercel AI SDK for production UIs.
+    flags: [Archived]

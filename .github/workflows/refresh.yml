@@ -1,0 +1,42 @@
+name: Refresh metrics
+
+# Weekly refresh of stars, last push, archive status and latest release.
+# Opens a pull request instead of pushing to main so every change is reviewed.
+on:
+  schedule:
+    - cron: "17 14 * * 1"   # Mondays 14:17 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install -e .
+      - name: Fetch metrics
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: python -m ai_tools refresh --delay 0.2
+      - name: Validate and re-render
+        run: |
+          python -m ai_tools validate
+          python -m ai_tools render
+      - name: Open pull request
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          if git diff --quiet; then echo "No changes"; exit 0; fi
+          branch="metrics/$(date -u +%Y-%m-%d)"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git checkout -b "$branch"
+          git commit -am "Refresh GitHub metrics $(date -u +%Y-%m-%d)"
+          git push -u origin "$branch"
+          gh pr create --fill --base main
