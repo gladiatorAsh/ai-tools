@@ -1,11 +1,13 @@
 # Recommended MCP servers
 
-These are the catalog entries whose adoption mode is **MCP server**. `servers.example.json` uses the
+MCP servers that skills in this pack rely on (`microsoft-docs` uses Microsoft Learn; `llm-red-teaming`,
+`code-review-llm-apps` and browser work use GitHub, Playwright and Chrome DevTools). `servers.example.json` uses the
 `mcpServers` layout read by most MCP clients (Claude Desktop/Code, Cursor, VS Code and others); copy the
 entries you want into your client's config. All servers are opt-in - nothing here runs by default.
 
 | Server | Package / image (verified 2026-10-22) | Needs |
 |---|---|---|
+| [Microsoft Learn](https://learn.microsoft.com/training/support/mcp) | Remote, streamable HTTP: `https://learn.microsoft.com/api/mcp` | Nothing - no authentication |
 | [GitHub](https://github.com/github/github-mcp-server) | `ghcr.io/github/github-mcp-server` (Docker) | `GITHUB_PERSONAL_ACCESS_TOKEN` in your shell |
 | [Playwright](https://github.com/microsoft/playwright-mcp) | `@playwright/mcp@0.0.83` | Node 18+ |
 | [Chrome DevTools](https://github.com/ChromeDevTools/chrome-devtools-mcp) | `chrome-devtools-mcp@1.11.0` | Node 20.19+ and Chrome |

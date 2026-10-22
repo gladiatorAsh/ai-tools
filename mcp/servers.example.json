@@ -1,24 +1,41 @@
 {
   "mcpServers": {
+    "microsoft-learn": {
+      "type": "http",
+      "url": "https://learn.microsoft.com/api/mcp"
+    },
     "github": {
       "command": "docker",
       "args": [
-        "run", "-i", "--rm",
-        "-e", "GITHUB_PERSONAL_ACCESS_TOKEN",
+        "run",
+        "-i",
+        "--rm",
+        "-e",
+        "GITHUB_PERSONAL_ACCESS_TOKEN",
         "ghcr.io/github/github-mcp-server"
       ]
     },
     "playwright": {
       "command": "npx",
-      "args": ["-y", "@playwright/mcp@0.0.83", "--headless"]
+      "args": [
+        "-y",
+        "@playwright/mcp@0.0.83",
+        "--headless"
+      ]
     },
     "chrome-devtools": {
       "command": "npx",
-      "args": ["-y", "chrome-devtools-mcp@1.11.0"]
+      "args": [
+        "-y",
+        "chrome-devtools-mcp@1.11.0"
+      ]
     },
     "context7": {
       "command": "npx",
-      "args": ["-y", "@upstash/context7-mcp@4.4.4"]
+      "args": [
+        "-y",
+        "@upstash/context7-mcp@4.4.4"
+      ]
     }
   }
 }

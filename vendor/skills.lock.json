@@ -1,0 +1,88 @@
+{
+  "_comment": "Third-party skills copied verbatim. Do not edit them in place; run `python -m ai_tools vendor-sync` to update.",
+  "sources": {
+    "github/awesome-copilot": {
+      "url": "https://github.com/github/awesome-copilot",
+      "commit": "26f4f4581b92775543e4cddda21dd1d1b296db2e",
+      "license": "MIT",
+      "reviewed": "2026-10-22"
+    }
+  },
+  "skills": {
+    "agent-owasp-compliance": {
+      "source": "github/awesome-copilot",
+      "path": "skills/agent-owasp-compliance",
+      "files": {
+        "SKILL.md": "5c1f92c48888beb811d2435e58aa02b2619422a921d6f70e3cc15e5c5be8e7da"
+      }
+    },
+    "appinsights-instrumentation": {
+      "source": "github/awesome-copilot",
+      "path": "skills/appinsights-instrumentation",
+      "files": {
+        "LICENSE.txt": "cacacf3e9ede21a9237d9fdef6728ebe7a27d489f6df08cbf946f622ad9b834c",
+        "SKILL.md": "15d281900b1fa0d7d29b086257c54b5852e0ba652b62fe877c6342fa1a8554af",
+        "examples/appinsights.bicep": "35793f28333b37b4639f866b2204a48eebcab343f0e52ab44128a618a28eaacb",
+        "references/ASPNETCORE.md": "29986d08a27b4d7a9086e89c1d56f9cc9b4e27bfd88ef65517f8bed641c7f636",
+        "references/AUTO.md": "8a0a447289e232dc54909017b4a490b46ca5fc1eb90099645eeb99b1b9a8a732",
+        "references/NODEJS.md": "6b36d0a8a1d2bb64ce8d0e7d51ddaac282c7bf180124c988e2c956e3c467bc1a",
+        "references/PYTHON.md": "fa5785231dde00eaad3a6f141211dfe291e82a44a24163eca3f4a3285e6e1742",
+        "scripts/appinsights.ps1": "69e1ccdf00b138e9f7a245e8da1d28d0ac00112f2a6a05c76d4432cc16fe9919"
+      }
+    },
+    "github-actions-hardening": {
+      "source": "github/awesome-copilot",
+      "path": "skills/github-actions-hardening",
+      "files": {
+        "SKILL.md": "31a8e7483d978e6267941edefebbe42aaa946bb3d43c9095aa3db343d4a8ff06",
+        "references/injection.md": "ebd6ef8d39ba6f1cd3dc13051e6ed4163d1d2ba36518cf0f7393836a211e58ff",
+        "references/permissions-and-tokens.md": "7272d00b20cf99c6fcbf34346f76730907c00701aef44bb9cfb7ab3eecac336b",
+        "references/report-format.md": "3ecd2442e173bc001f858747873349be7c6c77050470b87ae516647908b1e86e",
+        "references/supply-chain.md": "f66f613dbd732ce87c1e76b88208efde8feae3ffe5a3ab405cde4ce3df66f605",
+        "references/triggers-and-privilege.md": "465f3f76517e9f5374a73e30f46cb47e1fe62ce9fd81f782808a3abbb2df2756"
+      }
+    },
+    "mcp-implementation-security-review": {
+      "source": "github/awesome-copilot",
+      "path": "skills/mcp-implementation-security-review",
+      "files": {
+        "SKILL.md": "8974ffc89746dd2bf947069d6a162120df8f81fdf0a1ca31b3bb1781cf8bb31f"
+      }
+    },
+    "microsoft-agent-framework": {
+      "source": "github/awesome-copilot",
+      "path": "skills/microsoft-agent-framework",
+      "files": {
+        "SKILL.md": "7724dce33f8904f4c94b5952926a3ff6e4917938c6c3a0573a9bc11ffa18b757",
+        "references/dotnet.md": "f76dc39c17ff35c37981b124a4e1e360b827bbf737821b281593ee91f68ce2a9",
+        "references/python.md": "18202c434d87f7a240c67f1fe6c583a3e8b42c30853b3548ff8825019424d365"
+      }
+    },
+    "microsoft-docs": {
+      "source": "github/awesome-copilot",
+      "path": "skills/microsoft-docs",
+      "files": {
+        "SKILL.md": "2c2e0b361eab0d0f2526cf8c3c5df63b996fcdd4c12ffccdccf08f8f8f1f1f9c"
+      }
+    },
+    "secret-scanning": {
+      "source": "github/awesome-copilot",
+      "path": "skills/secret-scanning",
+      "files": {
+        "SKILL.md": "ebbaf8a49777e8be6d8c220b91bbee935b2aaab81b3ee976562484a339d750db",
+        "references/alerts-and-remediation.md": "4a2c661c87ae7ab74f8011f8c66b9e2595d63b4055b8b8eb62fb5d24141db678",
+        "references/custom-patterns.md": "749576858dae53fb08f5088dba819cb5865d28f8c63d1d4dd6eccfee67128d8f",
+        "references/push-protection.md": "01aeda8a3896cfa3b774b84fdc6cfcfaf85e80c82a326ccac09750b45581eae0"
+      }
+    },
+    "semantic-kernel": {
+      "source": "github/awesome-copilot",
+      "path": "skills/semantic-kernel",
+      "files": {
+        "SKILL.md": "cf85400071b8b052618541a2a450e7d3299d7af08ae9db08108f1d4d5111c11e",
+        "references/dotnet.md": "b7548096456befda77d2bb82c56e82146d1c11a0ba0e7fe0ec5b78467d7105ce",
+        "references/python.md": "fe8bb0f7a680aca1b4d6d196e5f625d8ff0d006e1233f2f20cc02ae65df8c448"
+      }
+    }
+  }
+}

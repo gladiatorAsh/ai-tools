@@ -1,0 +1,5 @@
+{
+  "name": "ai-tools",
+  "version": "0.2.0",
+  "description": "AI-engineering skills for GitHub Copilot: Azure OpenAI, Azure AI Search RAG, Agent Framework, evals, red-teaming, MCP, observability, plus a scored catalog of open-source AI tools."
+}

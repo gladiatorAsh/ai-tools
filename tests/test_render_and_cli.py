@@ -2,11 +2,9 @@ import json
 import re
 from pathlib import Path
 
-import pytest
-
 from ai_tools.__main__ import main
 from ai_tools.catalog import ROOT, load_catalog, load_metrics
-from ai_tools.render import BEGIN, END, format_stars, render_tables, splice
+from ai_tools.render import format_stars, render_document, render_tables
 from ai_tools.scoring import score_all
 
 
@@ -14,17 +12,6 @@ def test_format_stars():
     assert format_stars(999) == "999"
     assert format_stars(1500) == "1.5k"
     assert format_stars(184_220) == "184.2k"
-
-
-def test_splice_replaces_only_generated_block():
-    readme = f"intro\n{BEGIN}\nold\n{END}\noutro\n"
-    out = splice(readme, f"{BEGIN}\nnew\n{END}")
-    assert out == f"intro\n{BEGIN}\nnew\n{END}\noutro\n"
-
-
-def test_splice_requires_markers():
-    with pytest.raises(ValueError):
-        splice("no markers here", "x")
 
 
 def test_rendered_tables_cover_every_tool_and_category():
@@ -50,8 +37,16 @@ def test_pipe_characters_are_escaped():
             assert unescaped.count("|") in (6, 9), line
 
 
-def test_committed_readme_is_up_to_date():
+def test_committed_catalog_reference_is_up_to_date():
     assert main(["render", "--check"]) == 0
+
+
+def test_rendered_document_is_standalone():
+    catalog, metrics = load_catalog(), load_metrics()
+    doc = render_document(catalog, score_all(catalog.tools, metrics), metrics["evaluated_at"])
+    assert doc.startswith("<!-- Generated")
+    assert "# AI Tools Catalog" in doc
+    assert "BEGIN GENERATED" not in doc
 
 
 def test_cli_validate_and_score(capsys):
@@ -73,12 +68,13 @@ def test_cli_reports_missing_files_cleanly(tmp_path, capsys):
     assert "error:" in capsys.readouterr().err
 
 
-def test_render_check_detects_stale_readme(tmp_path):
-    stale = tmp_path / "README.md"
-    stale.write_text(f"x\n{BEGIN}\nstale\n{END}\n")
-    assert main(["render", "--readme", str(stale), "--check"]) == 1
-    assert main(["render", "--readme", str(stale)]) == 0
-    assert main(["render", "--readme", str(stale), "--check"]) == 0
+def test_render_check_detects_stale_output(tmp_path):
+    out = tmp_path / "catalog.md"
+    assert main(["render", "--output", str(out), "--check"]) == 1   # missing
+    out.write_text("stale")
+    assert main(["render", "--output", str(out), "--check"]) == 1
+    assert main(["render", "--output", str(out)]) == 0
+    assert main(["render", "--output", str(out), "--check"]) == 0
 
 
 # ---- MCP config hygiene ---------------------------------------------------------
@@ -96,7 +92,7 @@ def test_mcp_config_has_no_secrets():
 def test_mcp_config_pins_npm_versions():
     servers = json.loads(MCP_CONFIG.read_text())["mcpServers"]
     for name, spec in servers.items():
-        if spec["command"] == "npx":
+        if spec.get("command") == "npx":
             pkg = next(a for a in spec["args"] if not a.startswith("-"))
             assert re.search(r"@\d+\.\d+\.\d+$", pkg), f"{name}: pin an exact version, got {pkg}"
 
@@ -105,6 +101,9 @@ def test_mcp_servers_are_catalogued_as_mcp():
     catalog = load_catalog()
     mcp_repos = {t.repo for t in catalog.tools if t.mode == "mcp"}
     readme = (ROOT / "mcp" / "README.md").read_text()
+    for name, spec in json.loads(MCP_CONFIG.read_text())["mcpServers"].items():
+        if "url" in spec:
+            assert spec["url"].startswith("https://"), name
     for repo in mcp_repos - {"modelcontextprotocol/servers"}:
         assert f"github.com/{repo}" in readme, repo
 

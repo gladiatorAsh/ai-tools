@@ -30,7 +30,7 @@ application (Python/TypeScript/.NET services calling hosted or self-hosted model
 | MCP package names and versions in `mcp/` | **Verified** from each repo's `package.json` | Repository files |
 | Latest release tag/date | **Not captured in this snapshot** — filled in by `python -m ai_tools refresh` | GitHub API |
 | Recent star growth | **Not measured** — GitHub doesn't expose star history in the API | — |
-| Relevance, quality, integration effort | **Estimates** (0–10) by the curator, recorded per tool in `catalog/tools.yaml` | Judgment |
+| Relevance, quality, integration effort | **Estimates** (0–10) by the curator, recorded per tool in `tools-catalog/tools.yaml` | Judgment |
 | Security notes | Known, public issues only (e.g. Langflow CVE-2025-3248). Not a security audit — check current advisories before deploying | Public advisories |
 
 ## Scoring

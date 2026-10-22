@@ -11,8 +11,9 @@ from typing import Any
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-CATALOG_PATH = ROOT / "catalog" / "tools.yaml"
-METRICS_PATH = ROOT / "data" / "metrics.json"
+CATALOG_PATH = ROOT / "tools-catalog" / "tools.yaml"
+METRICS_PATH = ROOT / "tools-catalog" / "metrics.json"
+CATALOG_DOC_PATH = ROOT / "skills" / "choose-ai-tool" / "references" / "ai-tools-catalog.md"
 
 MODES = {
     "library": "Integrate directly as a dependency",
